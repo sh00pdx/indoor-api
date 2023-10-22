@@ -1,0 +1,14 @@
+service: match-api-dispatcher
+
+provider:
+  name: aws
+  runtime: python3.10
+
+functions:
+  api:
+    handler: app.main.handler
+    events:
+      - httpApi: '*'
+
+#plugins:
+#  - serverless-python-requirements

@@ -1,0 +1,19 @@
+# Idea Indoor automatizado
+## Flujos
+
+Inicialmente se deben registrar todos los arduinos en base de datos, de tal forma que podamos validar los arduinos aceptados por el sistema.
+
+El registro de arduinos se realizara con su direccion mac, la cual sabemos es unica para cada dispositivo.
+
+### Registro de un nuevo dispositivo
+
+#### Primeros pasos
+
+Para este caso asumiremos que el usuario se ha registrado exitosamente.
+
+1. El usuario conectara la arduino a internet
+2. El arduino comenzara inmediatamente a enviar peticiones post con los valores de los sensores, los cuales no se registraran al no estar activo el arduino en la base de datos.
+3. El usuario iniciara el proceso de activacion de dispositivo, para esto se le dara acceso a un formulario en el cual debe digitar la direccion mac del arduino, la cual debe ser validada comprobando que existe entre los arduinos admitidos.
+4. Al finalizar el registro el arduino se activara y asociara al usuario.
+
+Si el flujo se completa exitosamente los datos enviados por el arduino seran registrados en la base de datos
