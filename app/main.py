@@ -1,10 +1,11 @@
 from fastapi import FastAPI
 from app.urls import main, ping
-from autofact_lib_python_error_handler import error_middleware
+from app.middleware.error_handler import error_middleware
 from dotenv import load_dotenv
 from fastapi.middleware.cors import CORSMiddleware
 from mangum import Mangum
 import os
+from app.middleware.auth import CheckTokenMiddlewareSingleton
 
 load_dotenv()
 
@@ -20,6 +21,8 @@ app.add_middleware(
     allow_headers=["*"],
     allow_credentials=True,
 )
+
+app.middleware("http")(CheckTokenMiddlewareSingleton)
 
 
 app.include_router(main.router)

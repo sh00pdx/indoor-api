@@ -1,6 +1,7 @@
 from .equipment_service_deps import equipment_service_deps
 from app.logger import get_logger
 from app.dtos.equipment_dto import EquipmentDto
+from app.models import Equipment, User
 logger = get_logger(__name__)
 
 class EquipmentService:
@@ -10,21 +11,31 @@ class EquipmentService:
         self.deps = deps
         self.logger = logger
         
-    async def get_all(self, body: EquipmentDto):
-        # TODO: buscar todos los equipos del usuario (sin configuracion)
-        pass
+    async def get_all(self, user: User):
+        equipment_model: Equipment = self.deps['equipment']
+        equipments = list(equipment_model.select().where(equipment_model.user == user.id).to_dicts)
+        return equipments
     
-    async def get_by_mac(self, body: EquipmentDto):
-        # TODO: buscar equipo por mac + user_id (con configuracion)
-        pass
+    async def get_by_mac(self, mac: str, user):
+        equipment_model: Equipment = self.deps['equipment']
+        equipment = equipment_model.get_or_none(equipment_model.mac == mac and equipment_model.user == user.id)
+        return equipment
         
     async def update(self, body: EquipmentDto):
         # TODO: editar equipo por mac + user_id 
         pass
     
-    async def register(self, body: EquipmentDto):
+    async def register(self, body: EquipmentDto, user: User):
         # TODO: Registrar equipo, el arduino enviara su mac, (el dispositivo debe estar registrado previamente)
-        pass
+        equipment_model: Equipment = self.deps['equipment']
+        
+        equipment_model.create(
+            mac=body.mac,
+            name=body.name,
+            user=user.id
+        )
+        
+        return {'register': True}
     
     async def register_config(self, body: EquipmentDto):
         # TODO: Registrar configuracion de equipo especifico

@@ -1,7 +1,8 @@
 from .equipment_deps import equipment_deps
 from app.logger import get_logger 
 from app.dtos import EquipmentDto
-
+from app.middleware.error_handler import error_handler_decorator
+from app.models import User
 logger = get_logger(__name__)
     
 class EquipmentView:
@@ -11,21 +12,21 @@ class EquipmentView:
         self.deps = deps
         self.logger = logger
         
-    async def get_all(self, body: EquipmentDto):
-        # TODO: buscar todos los equipos del usuario (sin configuracion)
-        pass
+    async def get_all(self, user: User):
+        return await self.deps['EquipmentServiceSingleton'].get(user)
+
     
-    async def get_by_mac(self, body: EquipmentDto):
-        # TODO: buscar equipo por mac + user_id (con configuracion)
-        pass
+    async def get_by_mac(self, mac: str, user: User):
+        return await self.deps['EquipmentServiceSingleton'].get_by_mac(mac, user)
         
     async def update(self, body: EquipmentDto):
         # TODO: editar equipo por mac + user_id 
         pass
     
+    @error_handler_decorator()
     async def register(self, body: EquipmentDto):
         # TODO: Registrar equipo
-        pass
+        return self.deps['EquipmentServiceSingleton'].register(body)
     
     async def register_config(self, body: EquipmentDto):
         # TODO: Registrar configuracion de equipo especifico

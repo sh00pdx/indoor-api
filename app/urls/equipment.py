@@ -1,7 +1,7 @@
 from fastapi import APIRouter, Request
 from app.dtos import EquipmentDto
 from app.views.equipment.equipment_view import EquipmentViewSingleton
-
+from app.models import User
 router = APIRouter()
 
 @router.get("/equipment")
@@ -9,10 +9,9 @@ async def get_all(body: EquipmentDto):
     # TODO: buscar todos los equipos del usuario (sin configuracion)
     pass
 
-@router.post("/equipment")
-async def get_by_mac(body: EquipmentDto):
-    # TODO: buscar equipo por mac + user_id (con configuracion)
-    pass
+@router.get("/equipment/{mac}")
+async def get_by_mac(mac: str, user: User):
+   return await EquipmentViewSingleton.get_by_mac(mac, user)
 
 @router.put("/equipment")
 async def update(body: EquipmentDto):
@@ -22,7 +21,7 @@ async def update(body: EquipmentDto):
 @router.post("/equipment")
 async def register(body: EquipmentDto):
     # TODO: Registrar equipo
-    pass
+    return await EquipmentViewSingleton.register(body)
 
 @router.post("/equipment/config")
 async def register_config(body: EquipmentDto):

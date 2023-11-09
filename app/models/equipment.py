@@ -1,5 +1,5 @@
-from peewee import SQL, BigAutoField, CharField, DateTimeField
-
+from peewee import SQL, BigAutoField, CharField, DateTimeField, ForeignKeyField, DateField
+from .user import User
 from .connection_builder import BaseModel
 
 class Equipment(BaseModel):
