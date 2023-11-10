@@ -1,7 +1,7 @@
 from .equipment_service_deps import equipment_service_deps
 from app.logger import get_logger
-from app.dtos.equipment_dto import EquipmentDto
-from app.models import Equipment, User
+from app.dtos import EquipmentDto, EquipmentConfigDto, MeditionDto
+from app.models import Equipment, User, Configuration, ProductMedition
 logger = get_logger(__name__)
 
 class EquipmentService:
@@ -35,15 +35,37 @@ class EquipmentService:
             user=user.id
         )
         
-        return {'register': True}
+        return {'success': True}
     
-    async def register_config(self, body: EquipmentDto):
-        # TODO: Registrar configuracion de equipo especifico
-        pass
+    async def register_config(self, body: EquipmentConfigDto):
+        config_model: Configuration = self.deps['configuration']
+        
+        config_model.create(
+            config=body.config,
+            description=body.description,
+            equipment=body.equipment,
+            name=body.name
+        )
+        
+        return {'success': True}
     
-    async def register_medition(self, body: EquipmentDto):
-        # TODO: Registrar equipo medicion de equipo especifico
-        pass
+    async def register_medition(self, body: MeditionDto):
+        medition_model: ProductMedition = self.deps['producto_medition']
+        
+        medition = medition_model.create(**body)
+        
+        config_model: Configuration = self.deps['configuration']
+        config = config_model.get(config_model.equipment == body.equipment and config_model.state == 'active')
+        config = config.get('config')
+        
+        response = {
+            'activate_irrigation': True if config.get('soil_max_humidity', 2000) < body.soil_humidity and  config.get('sol_min_hidity', 0) > body.soil_humidity else False
+        }
+        
+        medition.action = response
+        medition.save()
+        
+        return response
     
     async def activate_config(self, body: EquipmentDto):
         # TODO: activar configuracion especifica (desactiva todas las siguientes)

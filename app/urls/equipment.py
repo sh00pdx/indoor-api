@@ -1,5 +1,5 @@
 from fastapi import APIRouter, Request
-from app.dtos import EquipmentDto
+from app.dtos import EquipmentDto, EquipmentConfigDto, MeditionDto
 from app.views.equipment.equipment_view import EquipmentViewSingleton
 from app.models import User
 router = APIRouter()
@@ -24,14 +24,13 @@ async def register(body: EquipmentDto):
     return await EquipmentViewSingleton.register(body)
 
 @router.post("/equipment/config")
-async def register_config(body: EquipmentDto):
-    # TODO: Registrar configuracion de equipo especifico
-    pass
+async def register_config(body: EquipmentConfigDto):
+    return await EquipmentViewSingleton.register_config(body)
 
 @router.post("/equipment/medition")
-async def register_medition(body: EquipmentDto):
+async def register_medition(body: MeditionDto):
     # TODO: Registrar equipo medicion de equipo especifico
-    pass
+    return await EquipmentViewSingleton.register_medition(body)
 
 @router.put("/equipment/config/activate")
 async def activate_config(body: EquipmentDto):

@@ -1,1 +1,2 @@
-from .equipment_dto import EquipmentDto
+from .equipment_dto import *
+from .medition_dto import *

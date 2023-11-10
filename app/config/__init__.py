@@ -1,4 +1,4 @@
-from decouple import Csv, config
+from decouple import config
 
 DATABASE = {
     "host": config("DB_HOST"),

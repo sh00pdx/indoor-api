@@ -1,6 +1,6 @@
 from .equipment_deps import equipment_deps
 from app.logger import get_logger 
-from app.dtos import EquipmentDto
+from app.dtos import EquipmentDto, MeditionDto
 from app.middleware.error_handler import error_handler_decorator
 from app.models import User
 logger = get_logger(__name__)
@@ -28,13 +28,14 @@ class EquipmentView:
         # TODO: Registrar equipo
         return self.deps['EquipmentServiceSingleton'].register(body)
     
+    @error_handler_decorator()
     async def register_config(self, body: EquipmentDto):
-        # TODO: Registrar configuracion de equipo especifico
-        pass
+        return self.deps['EquipmentServiceSingleton'].register_config(body)
+
     
-    async def register_medition(self, body: EquipmentDto):
-        # TODO: Registrar equipo medicion de equipo especifico
-        pass
+    @error_handler_decorator()
+    async def register_medition(self, body: MeditionDto):
+        return self.deps['EquipmentServiceSingleton'].register_medition(body)
     
     async def activate_config(self, body: EquipmentDto):
         # TODO: activar configuracion especifica (desactiva todas las siguientes)

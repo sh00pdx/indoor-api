@@ -10,7 +10,7 @@ class ProductMedition(BaseModel):
     id = BigAutoField()
     order_sent = IntegerField(null=True)
     record_time = DateTimeField(constraints=[SQL("DEFAULT CURRENT_TIMESTAMP")])
-    soil_temperature = DecimalField(null=True)
+    soil_humidity = DecimalField(null=True)
     updated_at = DateTimeField(constraints=[SQL("DEFAULT CURRENT_TIMESTAMP")])
 
     class Meta:

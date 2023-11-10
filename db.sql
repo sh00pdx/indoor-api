@@ -28,7 +28,7 @@ CREATE TABLE configuration (
     equipment_id BIGINT,
     name VARCHAR(100),
     description TEXT,
-    state ENUM('Active', 'Inactive'),
+    state ENUM('active', 'inactive'),
     config_json TEXT,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
@@ -36,12 +36,12 @@ CREATE TABLE configuration (
 );
 
 -- Create product_record table
-CREATE TABLE product_record (
+CREATE TABLE product_medition (
     id BIGINT AUTO_INCREMENT PRIMARY KEY,
     equipment_id BIGINT,
     ambient_temperature DECIMAL(5, 2),
     ambient_humidity DECIMAL(5, 2),
-    soil_temperature DECIMAL(5, 2),
+    soil_humidity DECIMAL(5, 2),
     order_sent BOOLEAN,
     record_time TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
