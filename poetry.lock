@@ -145,17 +145,6 @@ files = [
 toml = ["tomli"]
 
 [[package]]
-name = "decouple"
-version = "0.0.7"
-description = "Decoupling logic"
-category = "main"
-optional = false
-python-versions = ">=3.7"
-files = [
-    {file = "decouple-0.0.7.tar.gz", hash = "sha256:c253c1cc62b76e9720a066f334552548c6de1884bc3bdf456ddb62d61b867b09"},
-]
-
-[[package]]
 name = "devtools"
 version = "0.11.0"
 description = "Python's missing debug print command, and more."
@@ -585,6 +574,18 @@ pytest = ">=5.0"
 dev = ["pre-commit", "pytest-asyncio", "tox"]
 
 [[package]]
+name = "python-decouple"
+version = "3.8"
+description = "Strict separation of settings from code."
+category = "main"
+optional = false
+python-versions = "*"
+files = [
+    {file = "python-decouple-3.8.tar.gz", hash = "sha256:ba6e2657d4f376ecc46f77a3a615e058d93ba5e465c01bbe57289bfb7cce680f"},
+    {file = "python_decouple-3.8-py3-none-any.whl", hash = "sha256:d0d45340815b25f4de59c974b855bb38d03151d81b037d9e3f463b0c9f8cbd66"},
+]
+
+[[package]]
 name = "python-dotenv"
 version = "1.0.0"
 description = "Read key-value pairs from a .env file and set them as environment variables"
@@ -699,4 +700,4 @@ standard = ["colorama (>=0.4)", "httptools (>=0.5.0)", "python-dotenv (>=0.13)",
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.10"
-content-hash = "bb3a8e59424fe6f063d44d2227d92f8130fa8d9c7caeb74e0909b9d2f1b7be88"
+content-hash = "e83324a56153b3e2f23dee72fbf3582f746d13243f6429233e16a53121c902dc"

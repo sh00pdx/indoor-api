@@ -2,7 +2,7 @@ from fastapi import  Request
 from fastapi.exceptions import RequestValidationError
 from fastapi.responses import JSONResponse
 from ..exceptions.app_error import AppError
-from ..logger import get_logger
+from app.logger import get_logger
 import traceback
 
 logger = get_logger('error_handler')

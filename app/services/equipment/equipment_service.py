@@ -12,12 +12,12 @@ class EquipmentService:
         self.logger = logger
         
     async def get_all(self, user: User):
-        equipment_model: Equipment = self.deps['equipment']
-        equipments = list(equipment_model.select().where(equipment_model.user == user.id).to_dicts)
+        equipment_model: Equipment = self.deps['models']['equipment']
+        equipments = list(equipment_model.select().where(equipment_model.user == user.id))
         return equipments
     
     async def get_by_mac(self, mac: str, user):
-        equipment_model: Equipment = self.deps['equipment']
+        equipment_model: Equipment = self.deps['models']['equipment']
         equipment = equipment_model.get_or_none(equipment_model.mac == mac and equipment_model.user == user.id)
         return equipment
         
@@ -27,7 +27,7 @@ class EquipmentService:
     
     async def register(self, body: EquipmentDto, user: User):
         # TODO: Registrar equipo, el arduino enviara su mac, (el dispositivo debe estar registrado previamente)
-        equipment_model: Equipment = self.deps['equipment']
+        equipment_model: Equipment = self.deps['models']['equipment']
         
         equipment_model.create(
             mac=body.mac,
@@ -38,10 +38,10 @@ class EquipmentService:
         return {'success': True}
     
     async def register_config(self, body: EquipmentConfigDto):
-        config_model: Configuration = self.deps['configuration']
+        config_model: Configuration = self.deps['models']['configuration']
         
         config_model.create(
-            config=body.config,
+            #config=body.config,
             description=body.description,
             equipment=body.equipment,
             name=body.name
@@ -50,16 +50,21 @@ class EquipmentService:
         return {'success': True}
     
     async def register_medition(self, body: MeditionDto):
-        medition_model: ProductMedition = self.deps['producto_medition']
+        medition_model: ProductMedition = self.deps['models']['producto_medition']
         
-        medition = medition_model.create(**body)
+        medition = medition_model.create(
+            equipment=body.equipment,
+            ambient_humidity=body.ambient_humidity,
+            ambient_temperature=body.ambient_temperature,
+            soil_humidity=body.soil_humidity
+        )
         
-        config_model: Configuration = self.deps['configuration']
+        config_model: Configuration = self.deps['models']['configuration']
         config = config_model.get(config_model.equipment == body.equipment and config_model.state == 'active')
-        config = config.get('config')
+        config = config.config
         
         response = {
-            'activate_irrigation': True if config.get('soil_max_humidity', 2000) < body.soil_humidity and  config.get('sol_min_hidity', 0) > body.soil_humidity else False
+            'activate_irrigation': True if config.get('soil_max_humidity', 2000) < body.soil_humidity and  config.get('soil_low_humidity', 0) > body.soil_humidity else False
         }
         
         medition.action = response

@@ -1,11 +1,11 @@
 from fastapi import FastAPI
-from app.urls import main, ping
+from app.urls import ping, equipment
 from app.middleware.error_handler import error_middleware
 from dotenv import load_dotenv
 from fastapi.middleware.cors import CORSMiddleware
 from mangum import Mangum
-import os
 from app.middleware.auth import CheckTokenMiddlewareSingleton
+import os
 
 load_dotenv()
 
@@ -24,8 +24,7 @@ app.add_middleware(
 
 app.middleware("http")(CheckTokenMiddlewareSingleton)
 
-
-app.include_router(main.router)
+app.include_router(equipment.router)
 app.include_router(ping.router)
 
 app.middleware("http")(error_middleware)

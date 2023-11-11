@@ -1,25 +1,22 @@
 from fastapi import Request, HTTPException
 from .deps import check_token_deps
-from app.services.auth.auth_service import AuthService
+from app.models import User
+#from app.services.auth.auth_service import AuthService
 
 class CheckTokenMiddleware ():
-    deps: check_token_deps
-    ALLOW_ROUTES = [
-        '/segments/answer',
-        '/segments/favorite',
-        '/segments/deleted',
-        '/auth/signup',
-        '/segments/getFavorites',
-        '/tracking',
+    #deps: check_token_deps
+    PROTECTED_ROUTE_PREFIXES = [
+        '/equipment',
+        # Añade más prefijos según sea necesario
     ]
     
     def __init__ (self, deps_):
         self.deps = deps_
     
     async def __call__(self, request: Request, call_next):
-        authService: AuthService = self.deps['services']['AuthService']
-        if request.url.path in self.ALLOW_ROUTES:
-            await self.set_body(request)
+        #authService: AuthService = self.deps[services']['AuthService']
+        if any(request.url.path.startswith(prefix) for prefix in self.PROTECTED_ROUTE_PREFIXES):
+            """ await self.set_body(request)
             await request.body()  # Consumir completamente el flujo de la solicitud
             
             body = await request.json()
@@ -27,8 +24,8 @@ class CheckTokenMiddleware ():
             
             if token is None:
                 raise HTTPException(status_code=400, detail="Token missing")
-            
-            user = await authService.validate_or_register_token(token)    
+             """
+            user = User.get(User.id == 1)   
             request.state.user = user
 
         response = await call_next(request)
