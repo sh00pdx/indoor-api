@@ -11,12 +11,14 @@ services:
       - .env
     depends_on:
       - mysql
+    restart: unless-stopped
   mysql:
     image: mysql:5.7
     platform: linux/x86_64
     user: root
     ports:
        - "3306:3306"
+    restart: unless-stopped
     environment:
       MYSQL_ROOT_PASSWORD: s7Rt76LP=J}>
       MYSQL_DATABASE: indoor
