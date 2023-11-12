@@ -161,3 +161,6 @@ cython_debug/
 
 # NODE
 node_modules/
+
+mysql
+mysql/*
