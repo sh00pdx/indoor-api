@@ -1,0 +1,30 @@
+version: "3"
+
+services:
+  app:
+    build: .
+    volumes:
+      - ./app:/app
+    ports:
+      - "8000:8000"
+    env_file:
+      - .env
+    depends_on:
+      - mysql
+  mysql:
+    image: mysql:5.6
+    platform: linux/x86_64
+    user: root
+    ports:
+       - "3306:3306"
+    environment:
+      MYSQL_ROOT_PASSWORD: s7Rt76LP=J}>
+      MYSQL_DATABASE: indoor
+      MYSQL_USER: user_dev
+      MYSQL_PASSWORD: 52Zv1&UYX!QC
+    command: [
+      "--character-set-server=utf8mb4", 
+      "--collation-server=utf8mb4_unicode_ci"
+    ]
+    volumes:
+        - "./mysql:/var/lib/mysql"

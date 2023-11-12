@@ -2,6 +2,7 @@ from .equipment_service_deps import equipment_service_deps
 from app.logger import get_logger
 from app.dtos import EquipmentDto, EquipmentConfigDto, MeditionDto
 from app.models import Equipment, User, Configuration, ProductMedition
+
 logger = get_logger(__name__)
 
 class EquipmentService:
@@ -63,8 +64,16 @@ class EquipmentService:
         config = config_model.get(config_model.equipment == body.equipment and config_model.state == 'active')
         config = config.config
         
+        activate_irrigation = False
+        
+        if config.get('soil_low_humidity') >= body.soil_humidity:
+            activate_irrigation = True
+            
+        if config.get('soil_max_humidity') <= body.soil_humidity:
+            activate_irrigation = False
+                    
         response = {
-            'activate_irrigation': True if config.get('soil_max_humidity', 2000) < body.soil_humidity and  config.get('soil_low_humidity', 0) > body.soil_humidity else False
+            'activate_irrigation': activate_irrigation
         }
         
         medition.action = response
