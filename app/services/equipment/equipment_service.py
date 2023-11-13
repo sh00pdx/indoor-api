@@ -76,7 +76,7 @@ class EquipmentService:
             'activate_irrigation': activate_irrigation
         }
         
-        medition.action = response
+        medition.order_sent = response
         medition.save()
         
         return response
