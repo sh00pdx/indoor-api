@@ -3,6 +3,7 @@ from app.logger import get_logger
 from app.dtos import EquipmentDto, MeditionDto
 from app.middleware.error_handler import error_handler_decorator
 from app.models import User
+from devtools import debug
 logger = get_logger(__name__)
     
 class EquipmentView:
@@ -41,9 +42,9 @@ class EquipmentView:
         # TODO: activar configuracion especifica (desactiva todas las siguientes)
         pass
     
-    async def get_medition(self, body: EquipmentDto):
-        # TODO: traer mediciones de equipo especifico por rango de fecha
-        pass
+    async def get_medition(self, user):
+        return await self.deps['services']['EquipmentServiceSingleton'].get_medition(user)
+
     
     
 EquipmentViewSingleton = EquipmentView(equipment_deps)

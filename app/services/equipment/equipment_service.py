@@ -85,8 +85,9 @@ class EquipmentService:
         # TODO: activar configuracion especifica (desactiva todas las siguientes)
         pass
     
-    async def get_medition(self, body: EquipmentDto):
-        # TODO: traer mediciones de equipo especifico por rango de fecha
-        pass
+    async def get_medition(self, user):
+        medition_model: ProductMedition = self.deps['models']['producto_medition']
+        meditions = list(medition_model.select().where(medition_model.equipment == 1).order_by(medition_model.id.desc()).limit(10).dicts())
+        return meditions
     
 EquipmentServiceSingleton = EquipmentService(equipment_service_deps)

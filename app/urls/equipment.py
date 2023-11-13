@@ -11,10 +11,6 @@ async def get_all(request: Request):
     user: User = request.state.user
     return await EquipmentViewSingleton.get_all(user)
 
-@router.get("/equipment/{mac}")
-async def get_by_mac(request: Request, mac: str):
-    user: User = request.state.user
-    return await EquipmentViewSingleton.get_by_mac(mac, user)
 
 """ @router.put("/equipment")
 async def update(body: EquipmentDto):
@@ -41,7 +37,13 @@ async def activate_config(body: EquipmentDto):
     # TODO: activar configuracion especifica (desactiva todas las siguientes)
     pass """
 
-""" @router.get("/equipment/medition")
-async def get_medition(body: EquipmentDto):
-    # TODO: buscar todos los equipos del usuario (sin configuracion)
-    pass """
+@router.get("/equipment/medition")
+async def get_medition(request: Request):
+    user: User = request.state.user
+    return await EquipmentViewSingleton.get_medition(user)
+
+
+@router.get("/equipment/{mac}")
+async def get_by_mac(request: Request, mac: str):
+    user: User = request.state.user
+    return await EquipmentViewSingleton.get_by_mac(mac, user)
