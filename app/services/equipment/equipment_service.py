@@ -2,6 +2,9 @@ from .equipment_service_deps import equipment_service_deps
 from app.logger import get_logger
 from app.dtos import EquipmentDto, EquipmentConfigDto, MeditionDto
 from app.models import Equipment, User, Configuration, ProductMedition
+import matplotlib.pyplot as plt
+from io import BytesIO
+from fastapi.responses import StreamingResponse
 
 logger = get_logger(__name__)
 
@@ -87,7 +90,43 @@ class EquipmentService:
     
     async def get_medition(self, user):
         medition_model: ProductMedition = self.deps['models']['producto_medition']
-        meditions = list(medition_model.select().where(medition_model.equipment == 1).order_by(medition_model.id.desc()).limit(10).dicts())
-        return meditions
+        meditions = list(medition_model.select(medition_model.soil_humidity, medition_model.ambient_humidity, medition_model.ambient_temperature).where(medition_model.equipment == 1).order_by(medition_model.id.desc()).limit(50).dicts())
+        soil_humidity_values = [float(medition['soil_humidity']) for medition in meditions]
+        ambient_humidity_values = [float(medition['ambient_humidity']) for medition in meditions]
+        # Creamos la figura y el eje
+        fig, ax1 = plt.subplots()       
+
+        # Graficamos la humedad del suelo con color azul
+        ax1.plot(soil_humidity_values, color='blue', marker='o', label='Soil Humidity')     
+
+        # Creamos un segundo eje para las otras mediciones
+        ax2 = ax1.twinx()       
+
+        # Graficamos la humedad ambiental con color verde
+        ax2.plot(ambient_humidity_values, color='green', marker='x', label='Ambient Humidity')      
+
+        # Graficamos la temperatura ambiental con color rojo
+
+        # Añadimos títulos y etiquetas
+        ax1.set_title('Soil and Ambient Conditions Over Time')
+        ax1.set_xlabel('Measurement Number')
+        ax1.set_ylabel('Soil Humidity', color='blue')
+        ax2.set_ylabel('Ambient Conditions', color='green')     
+
+        # Añadimos las leyendas
+        ax1.legend(loc='upper left')
+        ax2.legend(loc='upper right')       
+
+        # Ajustamos los límites si es necesario
+        """ ax1.set_ylim([220, 250])
+        ax2.set_ylim([40, 50])      """ 
+
+        # Guardamos el gráfico en un buffer en lugar de un archivo
+        buf = BytesIO()
+        plt.savefig(buf, format='png')
+        buf.seek(0)  # Regresamos al inicio del buffer      
+
+        # Devolvemos el buffer como una respuesta StreamingResponse
+        return StreamingResponse(buf, media_type="image/png")
     
 EquipmentServiceSingleton = EquipmentService(equipment_service_deps)
