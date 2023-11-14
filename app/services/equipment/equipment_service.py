@@ -69,10 +69,10 @@ class EquipmentService:
         
         activate_irrigation = False
        
-        if config.get('soil_low_humidity') >= body.soil_humidity: #700 >  100
+        if config.get('soil_low_humidity') <= body.soil_humidity:
             activate_irrigation = True
             
-        if config.get('soil_max_humidity') <= body.soil_humidity: #100 <  100
+        if config.get('soil_max_humidity') >= body.soil_humidity:
             activate_irrigation = False
                     
         response = {
@@ -129,7 +129,7 @@ class EquipmentService:
 
         # Añadimos las etiquetas de 'order_sent' al gráfico con un zorder más alto para que se dibuje por encima
         for i, (label, y_value) in enumerate(zip(order_sent_labels, soil_humidity_values)):
-            ax1.text(i, y_value, f'{label}', color='red', fontsize=8, ha='center', va='bottom', zorder=3)
+            ax1.text(i, y_value, f'{label}', color='red', fontsize=14, ha='center', va='bottom', zorder=3)
     
         # Ajustamos los límites si es necesario
         """ ax1.set_ylim([220, 250])
