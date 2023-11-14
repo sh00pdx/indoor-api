@@ -68,11 +68,11 @@ class EquipmentService:
         config = config.config
         
         activate_irrigation = False
-        
-        if config.get('soil_low_humidity') >= body.soil_humidity:
+       
+        if config.get('soil_low_humidity') >= body.soil_humidity: #700 >  100
             activate_irrigation = True
             
-        if config.get('soil_max_humidity') <= body.soil_humidity:
+        if config.get('soil_max_humidity') <= body.soil_humidity: #100 <  100
             activate_irrigation = False
                     
         response = {
@@ -90,9 +90,19 @@ class EquipmentService:
     
     async def get_medition(self, user):
         medition_model: ProductMedition = self.deps['models']['producto_medition']
-        meditions = list(medition_model.select(medition_model.soil_humidity, medition_model.ambient_humidity, medition_model.ambient_temperature).where(medition_model.equipment == 1).order_by(medition_model.id.desc()).limit(50).dicts())
+        meditions = list(
+            medition_model.select(
+                medition_model.soil_humidity, medition_model.ambient_humidity, medition_model.order_sent
+            )
+            .where(medition_model.equipment == 1)
+            .order_by(medition_model.id.desc())
+            .limit(50)
+            .dicts()
+        )
+
         soil_humidity_values = [float(medition['soil_humidity']) for medition in meditions]
         ambient_humidity_values = [float(medition['ambient_humidity']) for medition in meditions]
+        order_sent_labels = ['Riego' if m['order_sent'] else '' for m in meditions]
         # Creamos la figura y el eje
         fig, ax1 = plt.subplots()       
 
@@ -117,6 +127,10 @@ class EquipmentService:
         ax1.legend(loc='upper left')
         ax2.legend(loc='upper right')       
 
+        # Añadimos las etiquetas de 'order_sent' al gráfico con un zorder más alto para que se dibuje por encima
+        for i, (label, y_value) in enumerate(zip(order_sent_labels, soil_humidity_values)):
+            ax1.text(i, y_value, f'{label}', color='red', fontsize=8, ha='center', va='bottom', zorder=3)
+    
         # Ajustamos los límites si es necesario
         """ ax1.set_ylim([220, 250])
         ax2.set_ylim([40, 50])      """ 
