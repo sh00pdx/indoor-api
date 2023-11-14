@@ -17,16 +17,16 @@ def error_handler_decorator(callback=None):
                 # Todo salió bien, devolver una respuesta JSON con código 200
                 if not database.is_closed():
                     database.close()
-                    logger.info("Database connection successfully closed.")
+                    logger.debug("Database connection successfully closed.")
                 else:
-                    logger.info("Database connection was already closed.")
+                    logger.debug("Database connection was already closed.")
                 return JSONResponse(content={"data": result}, status_code=200)
             except Exception as e:
                 if not database.is_closed():
                     database.close()
-                    logger.info("Database connection successfully closed.")
+                    logger.debug("Database connection successfully closed.")
                 else:
-                    logger.info("Database connection was already closed.")
+                    logger.debug("Database connection was already closed.")
                 # Algo salió mal, ejecutar el callback y levantar la excepción
                 if callback:
                     # Comprobar si el callback es síncrono o asíncrono

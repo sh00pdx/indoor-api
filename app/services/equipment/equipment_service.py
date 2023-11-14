@@ -40,7 +40,7 @@ class EquipmentService:
     
     async def register_config(self, body: EquipmentConfigDto):
         config_model: Configuration = self.deps['models']['configuration']
-        
+        #TODO: debe desactivar todas las configuraciones previa y dejar activa la nueva
         config_model.create(
             #config=body.config,
             description=body.description,
@@ -52,7 +52,7 @@ class EquipmentService:
     
     async def register_medition(self, body: MeditionDto):
         medition_model: ProductMedition = self.deps['models']['producto_medition']
-        
+        #TODO: Cambiar order_sent, se deben añadir mas columnas y ser del tipo ENUM
         medition = medition_model.create(
             equipment=body.equipment,
             ambient_humidity=body.ambient_humidity,
