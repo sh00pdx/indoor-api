@@ -13,6 +13,10 @@ class CheckTokenMiddleware ():
         # Añade más prefijos según sea necesario
     ]
     
+    EXCLUDE_PROTECTED_ROUTES = [
+        '/equipment/medition',
+    ]
+    
     def __init__ (self, deps_):
         self.deps = deps_
     
@@ -20,10 +24,12 @@ class CheckTokenMiddleware ():
         #authService: AuthService = self.deps[services']['AuthService']
         if any(request.url.path.startswith(prefix) for prefix in self.PROTECTED_ROUTE_PREFIXES):
             
-            token = request.headers.get('Authorization')
-            
-            if token != TOKEN:
-                return JSONResponse({"error": "Unauthorized", "message": "", "status_code": 401})
+            if request.url.path not in self.EXCLUDE_PROTECTED_ROUTES:
+                
+                token = request.headers.get('Authorization')
+
+                if token != TOKEN:
+                    return JSONResponse({"error": "Unauthorized", "message": "", "status_code": 401})
             
                 
             """ await self.set_body(request)
