@@ -9,3 +9,5 @@ DATABASE = {
 }
 
 ENV = config("ENVIRONMENT", default="qa")
+
+TOKEN = "2!551t4D8?eJjamsapxLRwcf7ImambmqRDEAPB4gS0Bp8UaryoQik2J5YJPwwTNbtxiZHOizWWFvwbdBkOGLzKqs/sPFXPSuuKCLLNVpdz7Vbo/Y/?n=lmPqKDrXMCH/VcauGW3DiGrbIZ6h0EnjjDlxlooaVqfb/cMRPA1zscM8Xb2p3Oc6q95v5eD36NccZEt2eXJh62BnilRCzIUibgm8?g/SyJ/VWbsFf0=SyRVHjkoHN7UsCtLo7ew/wtCu"

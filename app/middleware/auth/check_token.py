@@ -1,6 +1,9 @@
 from fastapi import Request, HTTPException
 from .deps import check_token_deps
 from app.models import User
+from app.config import TOKEN
+from fastapi.responses import JSONResponse
+
 #from app.services.auth.auth_service import AuthService
 
 class CheckTokenMiddleware ():
@@ -16,6 +19,13 @@ class CheckTokenMiddleware ():
     async def __call__(self, request: Request, call_next):
         #authService: AuthService = self.deps[services']['AuthService']
         if any(request.url.path.startswith(prefix) for prefix in self.PROTECTED_ROUTE_PREFIXES):
+            
+            token = request.headers.get('Authorization')
+            
+            if token != TOKEN:
+                return JSONResponse({"error": "Unauthorized", "message": "", "status_code": 401})
+            
+                
             """ await self.set_body(request)
             await request.body()  # Consumir completamente el flujo de la solicitud
             
